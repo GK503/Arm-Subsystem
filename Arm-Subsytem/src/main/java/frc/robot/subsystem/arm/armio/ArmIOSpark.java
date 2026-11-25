@@ -91,8 +91,8 @@ public class ArmIOSpark implements ArmIO {
 
     @Override
     public void setPID(double kP, double kI, double kD) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setPID'");
+        sparkMaxConfig.closedLoop.pid(kP, kI, kD);
+        motor.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
@@ -103,8 +103,12 @@ public class ArmIOSpark implements ArmIO {
 
     @Override
     public void setBrakeMode(boolean isBrake) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setBrakeMode'");
+        if (isBrake == true) {
+            sparkMaxConfig.idleMode(IdleMode.kBrake);
+        } else {
+            sparkMaxConfig.idleMode(IdleMode.kCoast);
+        }
+        motor.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
