@@ -30,7 +30,24 @@ public class ArmIOSpark implements ArmIO {
         sparkMaxConfig.voltageCompensation(ArmConstants.voltageCompensation);
         sparkMaxConfig.absoluteEncoder.zeroOffset(ArmConstants.absoluteEncZeroOff).positionConversionFactor(ArmConstants.absoluteEncPosConver).velocityConversionFactor(ArmConstants.velConverFac);
         motor.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    }
+        
+
+        // make signals
+        sparkMaxConfig.signals
+            .appliedOutputPeriodMs(20)
+            .outputCurrentPeriodMs(100)
+            .busVoltagePeriodMs(100)
+            .faultsAlwaysOn(true)
+            .faultsPeriodMs(1000)
+            .iAccumulationAlwaysOn(true)
+            .motorTemperaturePeriodMs(1000)
+            .primaryEncoderPositionAlwaysOn(true)
+            .primaryEncoderPositionPeriodMs(20)
+            .primaryEncoderVelocityAlwaysOn(true)
+            .primaryEncoderVelocityPeriodMs(20)
+            .warningsAlwaysOn(true)
+            .warningsPeriodMs(1000);
+        }
 
     @Override
     public void updateInputs(ArmIOInputs inputs) {
