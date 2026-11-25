@@ -51,32 +51,36 @@ public class ArmIOSpark implements ArmIO {
 
     @Override
     public void updateInputs(ArmIOInputs inputs) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateInputs'");
+        inputs.armIOData = new ArmIOData(
+            // TODO  IDK HOW TO GET THIS
+            false,
+            encoder.getPosition(),
+            encoder.getVelocity(),
+            motor.getBusVoltage(),
+            motor.getOutputCurrent(),
+            motor.getMotorTemperature());
     }
 
     @Override
     public void runPercentPower(double percentpower) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'runPercentPower'");
+        
     }
 
     @Override
-    public void runVoltage(Voltage voltage) {
+    public void runVoltage(double voltage) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'runVoltage'");
     }
 
     @Override
-    public void runPosition(Angle position) {
+    public void runPosition(double position) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'runPosition'");
     }
 
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stop'");
+        motor.stopMotor();
     }
 
     @Override
@@ -105,8 +109,33 @@ public class ArmIOSpark implements ArmIO {
 
     @Override
     public void reset(int CANID, MotorType motorType) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reset'");
+        motor.stopMotor();
+        motor = new SparkMax(CANID, motorType);
+        encoder = motor.getAbsoluteEncoder();
+        sparkMaxConfig = new SparkMaxConfig();
+        sparkMaxConfig.closedLoop.pid(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD, ClosedLoopSlot.kSlot0);
+        sparkMaxConfig.idleMode(IdleMode.kBrake);
+        sparkMaxConfig.inverted(ArmConstants.isInverted);
+        sparkMaxConfig.voltageCompensation(ArmConstants.voltageCompensation);
+        sparkMaxConfig.absoluteEncoder.zeroOffset(ArmConstants.absoluteEncZeroOff).positionConversionFactor(ArmConstants.absoluteEncPosConver).velocityConversionFactor(ArmConstants.velConverFac);
+        motor.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
+
+        // make signals
+        sparkMaxConfig.signals
+            .appliedOutputPeriodMs(20)
+            .outputCurrentPeriodMs(100)
+            .busVoltagePeriodMs(100)
+            .faultsAlwaysOn(true)
+            .faultsPeriodMs(1000)
+            .iAccumulationAlwaysOn(true)
+            .motorTemperaturePeriodMs(1000)
+            .primaryEncoderPositionAlwaysOn(true)
+            .primaryEncoderPositionPeriodMs(20)
+            .primaryEncoderVelocityAlwaysOn(true)
+            .primaryEncoderVelocityPeriodMs(20)
+            .warningsAlwaysOn(true)
+            .warningsPeriodMs(1000);
     }
     
 }

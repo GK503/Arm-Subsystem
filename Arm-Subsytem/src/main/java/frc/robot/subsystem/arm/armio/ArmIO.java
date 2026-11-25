@@ -12,13 +12,23 @@ import edu.wpi.first.units.measure.Voltage;
 
 
 public interface ArmIO {
+    // Wrong cause encoder returns a double
+    // public record ArmIOData(
+    //     boolean isConnected,
+    //     Angle posistion,
+    //     AngularVelocity velocity,
+    //     Voltage appliedVol,
+    //     Current current,
+    //     Temperature temp
+    // ){}
+
     public record ArmIOData(
         boolean isConnected,
-        Angle posistion,
-        AngularVelocity velocity,
-        Voltage appliedVol,
-        Current current,
-        Temperature temp
+        double posistion,
+        double velocity,
+        double appliedVol,
+        double current,
+        double temp
     ){}
 
     @AutoLog
@@ -30,9 +40,9 @@ public interface ArmIO {
 
     void runPercentPower(double percentpower);
 
-    void runVoltage(Voltage voltage);
+    void runVoltage(double voltage);
 
-    void runPosition(Angle position);
+    void runPosition(double position);
 
     void stop();
 
