@@ -4,6 +4,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -63,19 +64,17 @@ public class ArmIOSpark implements ArmIO {
 
     @Override
     public void runPercentPower(double percentpower) {
-        
+        // TODO Confisued on this part
     }
 
     @Override
     public void runVoltage(double voltage) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'runVoltage'");
+        motor.setVoltage(voltage);
     }
 
     @Override
     public void runPosition(double position) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'runPosition'");
+        motor.getClosedLoopController().setReference(position, ControlType.kPosition);
     }
 
     @Override
@@ -85,8 +84,20 @@ public class ArmIOSpark implements ArmIO {
 
     @Override
     public void setClosedLoopSlot(int slot) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setClosedLoopSlot'");
+        switch (slot) {
+            case 0:
+                //TODO
+                break;
+            case 1:
+                //TODO
+                break;
+            case 2:
+                //TODO
+                break;
+            default:
+                //TODO
+                break;
+        }
     }
 
     @Override
@@ -97,8 +108,7 @@ public class ArmIOSpark implements ArmIO {
 
     @Override
     public void setkS(double kS) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setkS'");
+        // TODO wdym by kS???
     }
 
     @Override
